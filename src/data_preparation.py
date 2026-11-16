@@ -26,36 +26,36 @@ PREDICTOR_COLS = [
     "laufzeit",     # duration in months
     "moral",        # credit history
     "verw",         # purpose
-    "hoession",      # credit amount
+    "hoehe",      # credit amount
     "sparkont",     # savings account / bonds
-    "besession_am",   # present employment since
+    "beszeit",   # present employment since
     "rate",         # installment rate (% of disposable income)
     "famges",       # personal status and sex
-    "bession",       # other debtors / guarantors
-    "wession_am",    # present residence since
-    "vession",       # property
+    "buerge",       # other debtors / guarantors
+    "wohnzeit",    # present residence since
+    "verm",       # property
     "alter",        # age in years
-    "weitkam",     # other installment plans
-    "wession",       # housing
-    "bishkam",      # number of existing credits at this bank
-    "beression",     # job
-    "ession_am",     # number of people being liable for maintenance
-    "telession",     # telephone
-    "gaession",      # foreign worker
+    "weitkred",     # other installment plans
+    "wohn",       # housing
+    "bishkred",      # number of existing credits at this bank
+    "beruf",     # job
+    "pers",     # number of people being liable for maintenance
+    "telef",     # telephone
+    "gastarb",      # foreign worker
 ]
 
-TARGET_COL = "kreession"  # 0 = good credit, 1 = bad credit
+TARGET_COL = "kredit"  # 0 = good credit, 1 = bad credit
 
 # Columns treated as categorical / ordinal (will be one-hot encoded)
 CATEGORICAL_COLS = [
-    "laufkont", "moral", "verw", "sparkont", "besession_am",
-    "famges", "bession", "vession", "weitkam", "wession",
-    "beression", "telession", "gaession",
+    "laufkont", "moral", "verw", "sparkont", "beszeit",
+    "famges", "buerge", "verm", "weitkred", "wohn",
+    "beruf", "telef", "gastarb",
 ]
 
 # Columns treated as numerical (will be standardised)
 NUMERICAL_COLS = [
-    "laufzeit", "hoession", "rate", "wession_am", "alter", "bishkam", "ession_am",
+    "laufzeit", "hoehe", "rate", "wohnzeit", "alter", "bishkred", "pers",
 ]
 
 

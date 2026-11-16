@@ -1,0 +1,4 @@
+Threshold,Accuracy,Precision,Recall,F1,Bad loans caught,Good applicants refused
+0.3,0.55,0.3333,0.5,0.4,30 of 60,60 of 140
+0.4,0.66,0.3889,0.2333,0.2917,14 of 60,22 of 140
+0.5,0.705,0.5556,0.0833,0.1449,5 of 60,4 of 140

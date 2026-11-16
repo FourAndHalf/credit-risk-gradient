@@ -48,6 +48,12 @@ credit-risk-gradient-descent/
 - DOI: https://doi.org/10.24432/C5X89F
 - Historical German credit data (1973–1975)
 
+> **Placeholder data notice.** The file currently in `data/raw/` is a synthetic
+> stand-in with the same shape and column names as the UCI file, not the real
+> data. Everything in `results/` was produced from it. Run
+> `python download_dataset.py` (or place the real `SouthGermanCredit.asc` in
+> `data/raw/`) and then `python run_all_experiments.py` to produce real results.
+
 ## Quick Start
 
 ```bash
@@ -62,7 +68,10 @@ pip install -r requirements.txt
 # 3. Download the dataset
 #    Place SouthGermanCredit.asc in data/raw/
 
-# 4. Run notebooks in order
+# 4. Regenerate every table and figure (about 15 seconds)
+python run_all_experiments.py
+
+# 5. Or explore step by step in the notebooks
 jupyter notebook notebooks/
 ```
 
@@ -70,9 +79,9 @@ jupyter notebook notebooks/
 
 | Experiment | Description |
 |-----------|-------------|
-| A | Learning-rate sensitivity (η = 0.001 to 1.0) |
-| B | Feature scaling vs no scaling |
-| C | L2 regularisation (λ = 0 vs λ = 1.0) |
+| A | Learning-rate sweep on both sides of the step-size ceiling 2/L (η = 0.001 to 4.0) |
+| B | Scaled vs unscaled features, each run at its own step size 1/L |
+| C | L2 regularisation (λ = 0, 0.1, 1, 10, 100) |
 | D | Independent check against scikit-learn |
 
 ## Key Mathematical Concepts
