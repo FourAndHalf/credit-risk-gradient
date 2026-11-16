@@ -1,8 +1,8 @@
 Quantity,Value
-Parameters (weights + intercept),50
-L = largest eigenvalue of H(0),0.9574
-Step-size ceiling 2/L,2.089
-Largest eigenvalue of H(w*),0.7518
-Smallest eigenvalue of H(w*),0.00073
-Condition number at w*,1024.8
-Minimum training loss J(w*),0.576518
+Parameters (weights + intercept),49
+L = largest eigenvalue of H(0),1.3711
+Step-size ceiling 2/L,1.459
+Largest eigenvalue of H(w*),0.7507
+Smallest eigenvalue of H(w*),0.00057
+Condition number at w*,1326.9
+Minimum training loss J(w*),0.431210

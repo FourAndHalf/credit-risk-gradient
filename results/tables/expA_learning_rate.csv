@@ -1,10 +1,10 @@
 Learning rate,Ratio to 2/L,Iterations,Final loss,Final gradient norm,Predicted rate,Observed rate,Status
-0.001,0.0,20000,0.589437,2.10e-02,1.0,0.99997,"Stable, tolerance not reached"
-0.01,0.005,20000,0.577664,2.74e-03,0.99999,0.99994,"Stable, tolerance not reached"
-0.1,0.048,20000,0.576535,1.63e-04,0.99993,0.99992,"Stable, tolerance not reached"
-0.5,0.239,17715,0.576518,1.00e-06,0.99963,0.99963,Converged
-1.0,0.479,8856,0.576518,1.00e-06,0.99927,0.99927,Converged
-2.0,0.957,4428,0.576518,9.99e-07,0.99853,0.99853,Converged
-2.5,1.197,3542,0.576518,1.00e-06,0.99817,0.99817,Converged
-3.0,1.436,20000,0.68497,3.33e-01,> 1,-,Unstable (loss increases)
-4.0,1.915,20000,1.159431,5.36e-01,> 1,-,Unstable (loss increases)
+0.001,0.001,20000,0.488044,3.98e-02,1.0,0.99997,"Stable, tolerance not reached"
+0.01,0.007,20000,0.44084,7.04e-03,0.99999,0.99995,"Stable, tolerance not reached"
+0.1,0.069,20000,0.4314,5.60e-04,0.99994,0.99991,"Stable, tolerance not reached"
+0.5,0.343,20000,0.43121,1.10e-06,0.99972,0.99962,"Stable, tolerance not reached"
+1.0,0.686,10128,0.43121,1.00e-06,0.99943,0.99924,Converged
+2.0,1.371,5063,0.43121,9.99e-07,0.99887,0.99847,Converged
+2.5,1.714,4049,0.43121,9.99e-07,0.99859,0.99809,Converged
+3.0,2.057,20000,0.497594,2.73e-01,> 1,-,Unstable (loss increases)
+4.0,2.742,20000,0.702002,4.36e-01,> 1,-,Unstable (loss increases)

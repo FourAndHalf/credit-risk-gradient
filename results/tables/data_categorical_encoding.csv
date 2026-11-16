@@ -1,14 +1,14 @@
 Variable,Levels,Dummy columns created,Largest level share (%)
-laufkont,4,3,38.7
-moral,5,4,52.1
-verw,11,10,10.5
-sparkont,5,4,62.2
-beszeit,5,4,34.4
+laufkont,4,3,39.4
+moral,5,4,53.0
+verw,10,9,28.0
+sparkont,5,4,60.3
+beszeit,5,4,33.9
 famges,4,3,54.8
-buerge,3,2,92.1
-verm,4,3,34.5
-weitkred,3,2,80.5
-wohn,3,2,70.7
-beruf,4,3,63.8
-telef,2,1,57.2
-gastarb,2,1,96.1
+buerge,3,2,90.7
+verm,4,3,33.2
+weitkred,3,2,81.4
+wohn,3,2,71.4
+beruf,4,3,63.0
+telef,2,1,59.6
+gastarb,2,1,96.3
