@@ -1,0 +1,7 @@
+Quantity,Value
+Coefficients significant at 5% (excluding intercept),16
+McFadden pseudo-R²,0.294
+Residual deviance,689.9
+Null deviance,977.4
+max |coef − statsmodels|,3.0e-13
+max |SE − statsmodels|,4.9e-14

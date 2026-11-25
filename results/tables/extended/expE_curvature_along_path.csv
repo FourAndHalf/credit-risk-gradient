@@ -1,0 +1,4 @@
+Learning rate,Threshold 2/η,λmax at start,λmax after 1 step,λmax late in run (max of last 100 its),Stable near the end?
+2.0,1.0,1.3711,0.4669,0.751,yes
+2.5,0.8,1.3711,0.3135,0.7508,yes
+3.0,0.667,1.3711,0.2147,0.7799,no

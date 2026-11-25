@@ -1,0 +1,6 @@
+Threshold,Cost
+"1/6 (Bayes, 5:1 costs)",140
+0.5 (default),185
+0.12 (lowest on test grid),119
+Refuse everyone,140
+Approve everyone,300

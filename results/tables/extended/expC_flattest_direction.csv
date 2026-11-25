@@ -1,0 +1,7 @@
+Parameter,Loading
+intercept,-0.713
+job = 2,0.349
+job = 3,0.338
+job = 4,0.337
+foreign_worker = 2,0.204
+credit_history = 1,0.132

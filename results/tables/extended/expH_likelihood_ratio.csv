@@ -1,0 +1,15 @@
+Test,LR statistic,df,p-value
+All predictors (model vs intercept only),287.4,48,7.4e-36
+Drop status,53.54,3,1.4e-11
+Drop credit_history,22.59,4,1.5e-04
+Drop purpose,33.38,9,1.1e-04
+Drop savings,20.31,4,4.3e-04
+Drop employment_duration,6.61,4,1.6e-01
+Drop personal_status_sex,9.52,3,2.3e-02
+Drop other_debtors,3.94,2,1.4e-01
+Drop property,6.24,3,1.0e-01
+Drop other_installment_plans,3.26,2,2.0e-01
+Drop housing,3.96,2,1.4e-01
+Drop job,3.33,3,3.4e-01
+Drop telephone,3.06,1,8.0e-02
+Drop foreign_worker,5.64,1,1.8e-02

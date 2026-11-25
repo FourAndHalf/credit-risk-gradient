@@ -1,0 +1,7 @@
+Method,Iterations,Speed-up vs GD (η = 1),Time (ms)
+"Gradient Descent, η = 1",10128,1.0,259.4
+"Gradient Descent, η = 2.5",4049,2.5,102.4
+"Heavy-ball (theory-optimal η, β)",351,28.9,17.0
+Nesterov (η = 1/λmax(H*)),321,31.6,16.0
+Armijo line search,3631,2.8,408.6
+Newton / IRLS,5,2025.6,1.7

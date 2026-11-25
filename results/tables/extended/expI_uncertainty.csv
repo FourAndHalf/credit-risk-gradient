@@ -1,0 +1,7 @@
+Quantity,Value
+"Test AUC (seed 42, λ = 0)",0.7261
+"Bootstrap 95% CI (2,000 resamples)","[0.647, 0.802]"
+Mean test AUC over 50 random splits,0.7746
+SD over 50 splits,0.0332
+Range over 50 splits,"[0.696, 0.853]"
+Rank of seed-42 split among 50,6

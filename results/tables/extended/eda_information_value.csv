@@ -1,0 +1,17 @@
+Variable,Information value,Chi-square p-value
+status,0.666,1.2e-26
+credit_history,0.293,1.3e-12
+duration (quintiles),0.216,2.6e-09
+savings,0.196,2.8e-07
+purpose,0.169,1.2e-04
+property,0.113,2.9e-05
+amount (quintiles),0.093,3.9e-04
+employment_duration,0.086,1.0e-03
+housing,0.085,8.8e-05
+age (quintiles),0.071,4.0e-03
+other_installment_plans,0.058,1.6e-03
+personal_status_sex,0.045,2.2e-02
+foreign_worker,0.044,1.6e-02
+other_debtors,0.032,3.6e-02
+job,0.009,6.0e-01
+telephone,0.006,2.8e-01
