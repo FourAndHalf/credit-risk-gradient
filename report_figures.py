@@ -433,6 +433,93 @@ def fig_modal_components(Hs, theta, eta=1.0, tol=1e-6):
     save(fig, "fig4_10_modal_components.png")
 
 
+# ---------------------------------------------------------- theory: 4.4
+def fig_scaling_preconditioning():
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
+    g = np.linspace(-3, 3, 300)
+    Xg, Yg = np.meshgrid(g, g)
+    A_raw = np.array([[1.0, 0.04], [0.04, 0.012]])
+    D = np.diag(1 / np.sqrt(np.diag(A_raw)))
+    A_sc = D @ A_raw @ D
+    for ax, A, title in [(axes[0], A_raw, "Unscaled features"),
+                         (axes[1], A_sc, "After standardisation")]:
+        ev = np.linalg.eigvalsh(A)
+        Z = 0.5 * (A[0, 0] * Xg ** 2 + 2 * A[0, 1] * Xg * Yg + A[1, 1] * Yg ** 2)
+        ax.contour(Xg, Yg, Z, levels=np.geomspace(0.01, 6, 12), colors=[GRID], linewidths=1)
+        path = gd_path(A, np.array([-2.5, 2.4]), 1.0 / ev[-1], 30)
+        ax.plot(path[:, 0], path[:, 1], color=ORANGE, lw=1.4, marker="o", ms=3.2)
+        ax.scatter([0], [0], color=INK, marker="*", s=90, zorder=4)
+        ax.set_aspect("equal")
+        ax.set_xlim(-3, 3)
+        ax.set_ylim(-3, 3)
+        ax.set_title(f"{title} (κ = {ev[-1] / ev[0]:.0f})")
+        ax.set_xlabel("θ₁")
+        ax.set_ylabel("θ₂")
+        ax.grid(False)
+        ax.text(-2.9, -2.8, "30 steps at η = 1/L", fontsize=8.5, color=MUTED)
+    save(fig, "fig4_11_scaling_preconditioning.png")
+
+
+def fig_methods_paths():
+    c, s_ = np.cos(np.pi / 6), np.sin(np.pi / 6)
+    Q = np.array([[c, -s_], [s_, c]])
+    L, mu = 1.0, 0.05
+    A = Q @ np.diag([L, mu]) @ Q.T
+    x0 = np.array([-2.6, 1.9])
+    gd = gd_path(A, x0, 1 / L, 40)
+    eta, beta = 1 / L, 0.6
+    hb = [x0, x0 - eta * A @ x0]
+    for _ in range(39):
+        x, xp = hb[-1], hb[-2]
+        hb.append(x - eta * A @ x + beta * (x - xp))
+    hb = np.array(hb)
+    newton = np.array([x0, np.zeros(2)])
+    g = np.linspace(-3, 3, 300)
+    Xg, Yg = np.meshgrid(g, g)
+    Z = 0.5 * (A[0, 0] * Xg ** 2 + 2 * A[0, 1] * Xg * Yg + A[1, 1] * Yg ** 2)
+    fig, ax = plt.subplots(figsize=(6.4, 5.6))
+    ax.contour(Xg, Yg, Z, levels=np.geomspace(0.01, 6, 12), colors=[GRID], linewidths=1)
+    ax.plot(gd[:, 0], gd[:, 1], color=ORANGE, lw=1.3, marker="o", ms=2.8, label="Gradient Descent, η = 1/L (40 steps)")
+    ax.plot(hb[:, 0], hb[:, 1], color=BLUE, lw=1.3, marker="s", ms=2.8, label="Heavy-ball momentum, η = 1/L, β = 0.6 (40 steps)")
+    ax.plot(newton[:, 0], newton[:, 1], color=AQUA, lw=2, ls="--", marker="D", ms=4, label="Newton's method (1 step)")
+    ax.scatter([0], [0], color=INK, marker="*", s=110, zorder=5)
+    ax.set_aspect("equal")
+    ax.set_xlim(-3, 3)
+    ax.set_ylim(-3, 3)
+    ax.set_xlabel("θ₁")
+    ax.set_ylabel("θ₂")
+    ax.set_title("Three methods on the same ill-conditioned quadratic (κ = 20)")
+    ax.legend(loc="lower right", fontsize=8.5)
+    ax.grid(False)
+    save(fig, "fig4_12_methods_paths.png")
+
+
+def fig_iterations_vs_kappa(kappa_study):
+    k = np.geomspace(1.5, 1e5, 300)
+    eps = np.log(1e6)
+    gd = eps / np.log((k + 1) / (k - 1))
+    hb = eps / np.log((np.sqrt(k) + 1) / (np.sqrt(k) - 1))
+    fig, ax = plt.subplots(figsize=(7.5, 4.4))
+    ax.plot(k, gd, color=ORANGE, label="Gradient Descent (optimal step): ∝ κ")
+    ax.plot(k, hb, color=BLUE, label="Momentum (heavy-ball / Nesterov): ∝ √κ")
+    ax.axhline(6, color=AQUA, lw=2, ls="--", label="Newton's method: a handful, independent of κ")
+    ax.axvline(kappa_study, color=MUTED, lw=1, ls=":")
+    gs = eps / np.log((kappa_study + 1) / (kappa_study - 1))
+    hs = eps / np.log((np.sqrt(kappa_study) + 1) / (np.sqrt(kappa_study) - 1))
+    ax.scatter([kappa_study, kappa_study], [gs, hs], color=INK, s=20, zorder=4)
+    ax.text(kappa_study * 1.15, gs * 0.55, f"≈ {gs:,.0f}", fontsize=8.5)
+    ax.text(kappa_study * 1.15, hs * 0.55, f"≈ {hs:,.0f}", fontsize=8.5)
+    ax.text(kappa_study * 1.1, 1.6, f"this study\nκ* = {kappa_study:,.0f}", fontsize=8.5, color=MUTED)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_ylim(1, 3e6)
+    ax.set_xlabel("Condition number κ (log scale)")
+    ax.set_ylabel("Iterations to reduce error by 10⁶ (log scale)")
+    ax.set_title("How each method's iteration count grows with κ (quadratic model)")
+    ax.legend(loc="upper left", fontsize=8.5)
+    save(fig, "fig4_13_iterations_vs_kappa.png")
+
+
 def main():
     df = load_raw_data(ROOT / "data" / "raw")
     d = prepare_data(df, scale=True)
@@ -460,6 +547,10 @@ def main():
     fig_decrease_parabola(e0[0])
     fig_stepsize_map(e0[0], es[0])
     fig_modal_components(Hs, theta)
+
+    fig_scaling_preconditioning()
+    fig_methods_paths()
+    fig_iterations_vs_kappa(es[0] / es[-1])
     print(f"L={e0[0]:.4f} lmax*={es[0]:.4f} mu*={es[-1]:.3e}")
 
 
