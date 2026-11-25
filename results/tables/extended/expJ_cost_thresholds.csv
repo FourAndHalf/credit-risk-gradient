@@ -1,6 +1,3 @@
-Threshold,Cost
-"1/6 (Bayes, 5:1 costs)",140
-0.5 (default),185
-0.12 (lowest on test grid),119
-Refuse everyone,140
-Approve everyone,300
+Model,Cost at t = 1/6,Cost at t = 0.5,Lowest on test grid,at t,Refuse everyone,Approve everyone
+λ = 0 (unregularised),140,185,119,0.12,140,300
+λ = 3 (chosen by CV),124,197,114,0.16,140,300

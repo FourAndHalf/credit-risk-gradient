@@ -589,48 +589,52 @@ def main():
 
     fig, ax = plt.subplots(figsize=(5.6, 5.2))
     ax.plot([0, 1], [0, 1], color=MUTED, lw=1, ls="--", label="Perfect calibration")
-    for lam, colr in ((0, ORANGE), (10, BLUE)):
+    lam_sel = int(best["λ"])
+    for lam, colr in ((0, ORANGE), (lam_sel, BLUE)):
         pt = curves[lam]
         q = pd.qcut(pt, 10, labels=False, duplicates="drop")
         D = pd.DataFrame({"y": yt, "p": pt, "g": q}).groupby("g").mean()
         r = cal.set_index("λ").loc[lam]
         ax.plot(D.p, D.y, color=colr, marker="o", ms=5,
-                label=f"λ = {lam}: slope {r['Calibration slope']:.2f}, HL p " + ("< 0.001" if r['HL p-value'] < 0.001 else f"= {r['HL p-value']:.2f}"))
+                label=f"λ = {lam}{' (CV)' if lam == lam_sel else ''}: slope {r['Calibration slope']:.2f}, HL p " + ("< 0.001" if r['HL p-value'] < 0.001 else f"= {r['HL p-value']:.2f}"))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.set_xlabel("Mean predicted probability (test deciles)")
     ax.set_ylabel("Observed bad-credit rate")
-    ax.set_title("Calibration: regularisation fixes overconfidence")
+    ax.set_title("Calibration improves with the CV-selected penalty")
     ax.legend(loc="upper left", fontsize=8.5)
     save(fig, "expJ_calibration.png")
 
+    # cost-based thresholds: compare the unregularised model with the CV-selected one
+    lam_cv = float(best["λ"])
+    p_cv = curves[int(lam_cv)] if int(lam_cv) in curves else sig(At @ newton(A, y, lam=lam_cv, tol=1e-10))
     ts_ = np.linspace(0.01, 0.99, 99)
-    cost = np.array([5 * ((yt == 1) & (p0 < t)).sum() + ((yt == 0) & (p0 >= t)).sum() for t in ts_])
-    def cost_at(t):
-        return int(5 * ((yt == 1) & (p0 < t)).sum() + ((yt == 0) & (p0 >= t)).sum())
-    tbest = ts_[np.argmin(cost)]
-    cost_t = pd.DataFrame([
-        {"Threshold": "1/6 (Bayes, 5:1 costs)", "Cost": cost_at(1 / 6)},
-        {"Threshold": "0.5 (default)", "Cost": cost_at(0.5)},
-        {"Threshold": f"{tbest:.2f} (lowest on test grid)", "Cost": int(cost.min())},
-        {"Threshold": "Refuse everyone", "Cost": int((yt == 0).sum())},
-        {"Threshold": "Approve everyone", "Cost": int(5 * (yt == 1).sum())},
-    ])
+
+    def cost_at(p_, t):
+        return int(5 * ((yt == 1) & (p_ < t)).sum() + ((yt == 0) & (p_ >= t)).sum())
+
+    rows = []
+    for label, p_ in ((f"λ = 0 (unregularised)", p0), (f"λ = {lam_cv:g} (chosen by CV)", p_cv)):
+        c_ = np.array([cost_at(p_, t) for t in ts_])
+        rows.append({"Model": label, "Cost at t = 1/6": cost_at(p_, 1 / 6), "Cost at t = 0.5": cost_at(p_, 0.5),
+                     "Lowest on test grid": int(c_.min()), "at t": round(float(ts_[np.argmin(c_)]), 2),
+                     "Refuse everyone": int((yt == 0).sum()), "Approve everyone": int(5 * (yt == 1).sum())})
+    cost_t = pd.DataFrame(rows)
     table(cost_t, "expJ_cost_thresholds")
-    fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    ax.plot(ts_, cost, color=BLUE)
+
+    fig, ax = plt.subplots(figsize=(7.4, 4.3))
+    for label, p_, colr in ((f"λ = 0 (overconfident)", p0, ORANGE), (f"λ = {lam_cv:g} (CV-selected, calibrated)", p_cv, BLUE)):
+        ax.plot(ts_, [cost_at(p_, t) for t in ts_], color=colr, label=label)
     ax.axhline((yt == 0).sum(), color=MUTED, lw=1, ls=":")
-    ax.text(0.7, (yt == 0).sum() + 4, "refuse everyone", fontsize=8.5, color=MUTED)
-    for t, lab, colr in ((1 / 6, "1/6", ORANGE), (0.5, "0.5", INK)):
-        ax.axvline(t, color=colr, lw=1.2, ls="--")
-        ax.text(t + 0.01, cost.max() * 0.95, f"t = {lab}: cost {cost_at(t)}", color=colr, fontsize=8.5)
-    ax.scatter([tbest], [cost.min()], color=AQUA, zorder=4)
-    ax.annotate(f"lowest cost {cost.min()} at t = {tbest:.2f}", xy=(tbest, cost.min()), xytext=(0.22, 112),
-                color=AQUA, fontsize=8.5, arrowprops=dict(arrowstyle="->", color=AQUA, lw=1))
-    ax.set_ylim(100, cost.max() * 1.08)
+    ax.text(0.98, (yt == 0).sum() + 4, "refuse everyone (140)", fontsize=8.5, color=MUTED, ha="right")
+    for t, lab in ((1 / 6, "t = 1/6 (Bayes, 5:1)"), (0.5, "t = 0.5 (default)")):
+        ax.axvline(t, color=INK, lw=1, ls="--")
+        ax.text(t + 0.01, 292, lab, fontsize=8.5, color=INK)
+    ax.set_ylim(90, 315)
     ax.set_xlabel("Decision threshold t (refuse if predicted PD ≥ t)")
-    ax.set_ylabel("Cost on test set (5 × bad approved + good refused)")
-    ax.set_title("Choosing the lending threshold from the costs of errors")
+    ax.set_ylabel("Test-set cost (5 × bad approved + good refused)")
+    ax.set_title("Cost-based thresholds work once the probabilities are calibrated")
+    ax.legend(loc="lower right", fontsize=8.5)
     save(fig, "expJ_cost_threshold.png")
 
     print("\nAll extended experiments done.")
